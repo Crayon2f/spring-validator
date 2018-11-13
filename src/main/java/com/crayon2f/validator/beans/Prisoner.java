@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Negative;
 import javax.validation.constraints.NotEmpty;
@@ -28,12 +30,15 @@ import java.util.List;
 @ApiModel("囚犯实体类")
 public class Prisoner {
 
+    @Valid
+    private List<Prisoner> prisonerList;
+
     @ApiModelProperty("名字")
     @NotEmpty(message = "name 不能为空", groups = First.class)
     private String name;
     @ApiModelProperty("囚龄")
     @NotNull(message = "囚龄不能为空")
-    @Range(min = 20, max = 70, message = "囚龄 20~70", groups = {First.class, Second.class})
+    @Range(min = 20, max = 70, message = "囚龄 20~70")
     private Integer age;
     @NotNull(message = "国籍不能为空", groups = Second.class)
     @ApiModelProperty("国籍")

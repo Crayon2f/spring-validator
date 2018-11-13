@@ -2,6 +2,7 @@ package com.crayon2f.validator.controller;
 
 import com.crayon2f.common.pojo.Data;
 import com.crayon2f.validator.beans.Prisoner;
+import com.crayon2f.validator.beans.ValidatedBean;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
@@ -115,7 +117,7 @@ public class Controller {
             @ApiImplicitParam(name = "param", value = "param", paramType = "body")
     })
     public List<String> singletonCollection(
-            @RequestBody  @Size(min = 1, max = 10) List<String> param) {
+            @RequestBody @Size(min = 1, max = 10) List<String> param) {
         if (CollectionUtils.isNotEmpty(param)) {
             return param;
         }
@@ -132,7 +134,7 @@ public class Controller {
         if (ArrayUtils.isNotEmpty(param)) {
             return param;
         }
-        return new String[]{"123","333"};
+        return new String[]{"123", "333"};
     }
 
     /* 单个参数,并且以RequestParam传入时 必须有构造函数 不然会报错(No primary or default constructor found for XX) 例如 List,LocalDateTime 等类*/
@@ -146,5 +148,12 @@ public class Controller {
     public void bean(@RequestBody @Validated Prisoner prisoner) {
 
         System.out.println(prisoner);
+    }
+
+    @ApiOperation(value = "以List<bean>形式传参")
+    @RequestMapping(value = "listBean", method = RequestMethod.POST)
+    public void listBean(@RequestBody @Validated({Prisoner.First.class, Prisoner.Second.class})ValidatedBean bean) {
+
+        System.out.println(bean);
     }
 }
